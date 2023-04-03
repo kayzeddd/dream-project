@@ -2,6 +2,15 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors")
 
+const { testFetch } = require('./openai-handlers')
+const { 
+  addUser, 
+  addDream, 
+  getAllDreams, 
+  getUserDreams,
+  getOneDream 
+} = require('./handlers')
+
 express()
 
   .use(morgan("tiny"))
@@ -9,19 +18,24 @@ express()
 
   .use(express.static("public"))
   .use(cors())
+  .use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods: *");
+    res.header("Allow: *"); 
+    next();
+    })
 
-  // .get('/', (req, res) => {
-  //   res.status(200).json({status:"success"})
-  // })
-  
 
-  .get("*", (req, res) => {
-    res.status(404).json({
-      status: 404,
-      message: "nope",
-    });
-  })
+  .get("/test", testFetch)
+  .get("/all-dreams", getAllDreams)
+  .get("/user-dreams/:userId", getUserDreams)
+  .get("/dream/:dreamId", getOneDream)
+
+  .post("/add-user", addUser)
+
+  .post("/add-dream", addDream)
+
+
 
   .listen(8000, () => console.log(`Listening on port 8000`));
-
-  
