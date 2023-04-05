@@ -24,7 +24,7 @@ const DreamCard = ({date, userId, extraData, dreamData, charData, dreamId}) => {
                     <AuthorLink onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/profile/${userId}`);
-                    }}>{userId}</AuthorLink>
+                    }}>{userId.split("@")[0]}</AuthorLink>
                 </Author>
             </TopDiv>
             <MidDiv>

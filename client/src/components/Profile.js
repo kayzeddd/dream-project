@@ -16,8 +16,8 @@ const Profile = () => {
             .then(res => res.json())
             .then(data => {
                 console.log(data)
-                setSaveAllDreams(data.dreamsArr)
-                setAllDreams(data.dreamsArr)
+                setSaveAllDreams(data)
+                setAllDreams(data)
             })
             .catch(err => console.log(err))}
     }, [userId])
@@ -35,7 +35,7 @@ const Profile = () => {
                                     userId={userId}
                                     extraData={dream.dreamData.finalData}
                                     dreamData={dream.dreamData.storyData}
-                                    charData={dream.dreamData.detailsData}
+                                    charData={dream.dreamData.charData}
                                     />
                         })
                     }

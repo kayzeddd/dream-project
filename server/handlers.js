@@ -18,7 +18,7 @@ const addUser = async (req, res) => {
     await client.connect();
     const existingUser = await db.collection("users_data").findOne({ _id: userId });
     if(!existingUser){
-      await db.collection("users_data").insertOne({ _id: userId, userData, dreamsArr: [] });
+      await db.collection("users_data").insertOne({ _id: userId, userData, savedDreamsArr: [] });
       return res.status(200).json("new user created");
     }
     else{
@@ -40,8 +40,8 @@ const addDream = async (req, res) => {
   try{
     await client.connect();
     const postAllDreamsRes = await db.collection("all_dreams").insertOne({dreamData, userId, _id, date, userData})
-    const postInUsersRes = await db.collection("users_data").updateOne({ _id: userId }, { $push: {dreamsArr: { _id, dreamData, date, userData }}})
-    res.status(200).json({postAllDreamsRes, postInUsersRes, dreamId: _id})
+    // const postInUsersRes = await db.collection("users_data").updateOne({ _id: userId }, { $push: {dreamsArr: { _id, dreamData, date, userData }}})
+    res.status(200).json({postAllDreamsRes, dreamId: _id})
     client.close();
   }
   catch(err){
@@ -71,7 +71,10 @@ const getUserDreams = async (req, res) => {
   const { userId } = req.params;
   try{
     await client.connect();
-    const userData = await db.collection("users_data").findOne({ _id: userId });
+    const resArr = await db.collection("all_dreams").find().toArray();
+    let userData = resArr.filter( data => {
+      return userId === data.userId
+    })
     res.status(200).json(userData)
     client.close()
   }
@@ -98,10 +101,27 @@ const getOneDream = async (req, res) => {
   }
 } 
 
+const addComment = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const db = client.db("dream_project");
+  const {dreamId, userData, comment} = req.body;
+  try{
+    await client.connect();
+    const mongoRes = await db.collection("all_dreams").updateOne({ _id: dreamId }, { $push: { commentsArr: {userData, comment} }})
+    res.status(200).json({mongoRes, dreamId});
+    await client.close()
+  }
+  catch(err){
+    console.log(err)
+    res.status(500).json(err)
+  }
+}
+
 module.exports = { 
   addUser, 
   addDream,
   getAllDreams, 
   getUserDreams,
   getOneDream,
+  addComment,
 }

@@ -8,7 +8,8 @@ const {
   addDream, 
   getAllDreams, 
   getUserDreams,
-  getOneDream 
+  getOneDream,
+  addComment, 
 } = require('./handlers')
 
 express()
@@ -35,7 +36,7 @@ express()
   .post("/add-user", addUser)
 
   .post("/add-dream", addDream)
-
+  .post("/add-comment", addComment)
 
 
   .listen(8000, () => console.log(`Listening on port 8000`));

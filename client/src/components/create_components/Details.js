@@ -3,26 +3,26 @@ import styled from 'styled-components'
 import { useState, useContext, useEffect } from 'react'
 
 const Details = ({dreamData, setDreamData}) => {
-    const [detailsData, setDetailsData] = useState(() =>{
-        return dreamData["detailsData"] && Object.keys(dreamData["detailsData"]).length > 0 
-                ? dreamData["detailsData"]
+    const [charData, setCharData] = useState(() =>{
+        return dreamData["charData"] && Object.keys(dreamData["charData"]).length > 0 
+                ? dreamData["charData"]
                 : {}
     })
 
     const handleChange = (char, valueId, value) => {
-        setDetailsData({...detailsData, [char]:{...detailsData[char], [valueId]:value}})
+        setCharData({...charData, [char]:{...charData[char], [valueId]:value}})
     }
 
     const addChar = () => {
-        setDetailsData({...detailsData, [`char-${Object.keys(detailsData).length}`]:{}})
+        setCharData({...charData, [`char-${Object.keys(charData).length}`]:{}})
     }
 
     useEffect(()=>{
-        setDreamData({...dreamData, detailsData})
+        setDreamData({...dreamData, charData})
         return () => {
             
         }
-    },[detailsData])
+    },[charData])
 
     const render = (charObj) => {
         console.log(charObj)
@@ -64,7 +64,7 @@ const Details = ({dreamData, setDreamData}) => {
     return (
         <Wrapper>
             <CharactersDiv>
-                { dreamData["detailsData"] && Object.keys(dreamData["detailsData"]).length > 0 && render(dreamData["detailsData"])}
+                { dreamData["charData"] && Object.keys(dreamData["charData"]).length > 0 && render(dreamData["charData"])}
                 <AddCharBtn onClick={addChar}>+</AddCharBtn>
             </CharactersDiv>
         </Wrapper>

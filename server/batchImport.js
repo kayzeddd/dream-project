@@ -6,14 +6,18 @@ const options = {
     useUnifiedTopology: true,
 };
 
-const { fakeData } = require("./data")
+const { createUsersAndDreams } = require("./data")
+
+const data = createUsersAndDreams();
+console.log(data)
 
 const batchImport = async () => {
     const client = new MongoClient(MONGO_URI, options);
     const db = client.db("dream_project")
     try {
         await client.connect()
-        await db.collection("user_data").insertMany(fakeData)
+        await db.collection("all_dreams").insertMany(data.allDreams)
+        await db.collection("users_data").insertMany(data.userArray)
         client.close()
     }
     catch(err){

@@ -35,7 +35,7 @@ const UserProfile = () => {
                                     userId={user.email}
                                     extraData={dream.dreamData.finalData}
                                     dreamData={dream.dreamData.storyData}
-                                    charData={dream.dreamData.detailsData}
+                                    charData={dream.dreamData.charData}
                                     />
                         })
                     }

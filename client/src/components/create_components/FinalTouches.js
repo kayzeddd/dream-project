@@ -16,9 +16,9 @@ const FinalTouches = ({dreamData, setDreamData, postDream}) => {
                 : []
     })
 
-    const [radioValue, setRadioValue] = useState( () => {
-        return dreamData["finalData"]?.radioValue 
-                ? dreamData["finalData"].radioValue 
+    const [privacySetting, setPrivacySetting] = useState( () => {
+        return dreamData["finalData"]?.privacySetting 
+                ? dreamData["finalData"].privacySetting 
                 : ""
     })
 
@@ -28,12 +28,12 @@ const FinalTouches = ({dreamData, setDreamData, postDream}) => {
     }
 
     useEffect(()=>{
-        setDreamData({...dreamData, finalData:{...finalData, checkedValues, radioValue}})
+        setDreamData({...dreamData, finalData:{...finalData, checkedValues, privacySetting}})
         console.log(dreamData)
         return () => {
             
         }
-    },[finalData, checkedValues, radioValue])
+    },[finalData, checkedValues, privacySetting])
 
     const dreamTypes = ["mundane", "lucid", "nightmare", "fantasy", "recurring", "prophetic", "epic", "abstract", "past-life", "intimate", "18+", "death", "time-travel", "unwordly", "horror", "religious", "after-life", "alien"]
 
@@ -50,7 +50,7 @@ const FinalTouches = ({dreamData, setDreamData, postDream}) => {
     }
 
     const handleRadio = (e) => {
-        setRadioValue(e.target.value)
+        setPrivacySetting(e.target.value)
     }
 
     return (
@@ -90,13 +90,13 @@ const FinalTouches = ({dreamData, setDreamData, postDream}) => {
                         <SettingInput 
                         type="radio" id="private" name="privacy" value="private" 
                         onChange={handleRadio}
-                        defaultChecked={dreamData["finalData"]?.radioValue === "private" }/>
+                        defaultChecked={dreamData["finalData"]?.privacySetting === "private" }/>
                         <SettingLabel for="private">private</SettingLabel>
                     </SettingDiv>
                     <SettingDiv>
                         <SettingInput type="radio" id="public" name="privacy" value="public" 
                         onChange={handleRadio}
-                        defaultChecked={dreamData["finalData"]?.radioValue === "public" }
+                        defaultChecked={dreamData["finalData"]?.privacySetting === "public" }
                         />
                         <SettingLabel for="public">public</SettingLabel>
                     </SettingDiv>
