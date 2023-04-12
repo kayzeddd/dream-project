@@ -21,7 +21,6 @@ const createUsersAndDreams = () => {
         userObj.userData.email = JSON.parse(JSON.stringify(userObj._id));
         userObj.userData.picture = faker.image.avatar();
         userObj.savedDreamsArr = [];
-        // userObj.dreamsArr = [];
         let randomNum = Math.ceil((Math.random() * 5) + 5)
         for (let j = 0; j < randomNum; j++){
             let dreamObj = {};
@@ -65,7 +64,6 @@ const createUsersAndDreams = () => {
             }
             dreamObj.dreamData.finalData.privacySetting = "public";
 
-            // userObj.dreamsArr.push(dreamObj)
             allDreams.push(dreamObj)
         }
         userArray.push(userObj)
@@ -73,6 +71,5 @@ const createUsersAndDreams = () => {
     return {userArray, allDreams}
 }   
 
-// console.log(createUsersAndDreams())
 
 module.exports = { createUsersAndDreams }
