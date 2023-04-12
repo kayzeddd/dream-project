@@ -25,7 +25,6 @@ const Details = ({dreamData, setDreamData}) => {
     },[charData])
 
     const render = (charObj) => {
-        console.log(charObj)
         return Object.keys(charObj).map((key, i) => {
             return (
                 <CharDiv key={`key-${i}`}>
@@ -63,54 +62,107 @@ const Details = ({dreamData, setDreamData}) => {
     
     return (
         <Wrapper>
+            <Div>
+                <Text>Add Details About the Characters and Places in your Dream!</Text>
+            </Div>
             <CharactersDiv>
                 { dreamData["charData"] && Object.keys(dreamData["charData"]).length > 0 && render(dreamData["charData"])}
-                <AddCharBtn onClick={addChar}>+</AddCharBtn>
+                <AddCharDiv onClick={addChar}><AddDiv>+</AddDiv></AddCharDiv>
             </CharactersDiv>
         </Wrapper>
     )
 }
+
+const Div = styled.div`
+    display: flex;
+    justify-content: center;
+`
+
+const Text = styled.div`
+    font-size: 24px;
+`
+
 const ImgInput = styled.input`
+
 `
 
 const ImgLabel = styled.label`
 `
 
 const CharImage = styled.div`
+    display: flex;
+    flex-direction: column;
 `
 
 const CharTextarea = styled.textarea`
+    resize: none;
+    height: 120px;
+    font-size: 16px;
+    font-family: 'Walter Turncoat', cursive;
 `
 
 const CharLabel = styled.label`
 `
 
 const CharDetails = styled.div`
+    display: flex;
+    flex-direction: column;
 `
 
 const NameInput = styled.input`
+font-size: 16px;
+    font-family: 'Walter Turncoat', cursive;
 `
 
 const NameLabel = styled.label`
 `
 
 const NameDiv = styled.div`
+    display: flex;
+    flex-direction: column;
 `
 
 const CharDiv = styled.div`
 display: flex;
 flex-direction: column;
-padding: 5px;
-border: 2px solid black;
+padding: 10px;
+row-gap: 15px;
+border: 2px solid white;
+border-radius: 10px;
+height: 280px;
 `
 
-const AddCharBtn = styled.button`
+const AddCharDiv = styled.div`
+    background-color: #242424;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed white;
+    border-radius: 10px;
+    height: 300px;
+    cursor: pointer;
+
+    &:hover{
+        background-color: #363535;
+    }
+`
+
+const AddDiv = styled.div`
+
 `
 
 const CharactersDiv = styled.div`
+display: grid;
+grid-template-columns: repeat( 3, 380px);
+grid-template-rows: 300px;
+column-gap: 10px;
+row-gap: 10px;
+margin-top: 20px;
+height: 800px;
 `
 
 const Wrapper = styled.div`
+    overflow-y: scroll;
 `
 
 export default Details

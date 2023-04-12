@@ -5,18 +5,20 @@ import Home from "./components/Home";
 import Header from "./components/Header";
 import GlobalStyles from "./GlobalStyles";
 import CreateDream from "./components/create_components/CreateDream";
-import stars2 from "./videos/stars2.mp4";
+import clouds from "./videos/clouds.mp4";
 import cave from "./images/cave.jpg"
 import AllDreams from "./components/AllDreams";
 import UserProfile from "./components/UserProfile";
 import DreamDetails from "./components/DreamDetails";
 import Profile from "./components/Profile";
+import dreamcatcher from "./images/dream-catcher.png"
+
 
 const App = () => {
   const vidRef = useRef(null)
 
   const handlePlay = () => {
-    vidRef.current.playbackRate = 0.2; 
+    vidRef.current.playbackRate = 0.8; 
     vidRef.current.play(); 
   };
 
@@ -25,12 +27,12 @@ const App = () => {
     <GlobalStyles/>
         <Wrapper>
             <InnerWrapper>
-              {/* <Video ref={vidRef} autoPlay muted loop onCanPlay={handlePlay}>
-                    <Source src={stars2} type="video/mp4" />
-              </Video> */}
-              <Wallpaper>
+              {<Video ref={vidRef} autoPlay muted loop onCanPlay={handlePlay}>
+                    <Source src={clouds} type="video/mp4" />
+              </Video>}
+              {/* <Wallpaper>
                 <Image src={cave}/>
-              </Wallpaper>
+              </Wallpaper> */}
                         <Header/>
               <Main>
                 <Routes>
@@ -76,7 +78,9 @@ const Wrapper = styled.div`
   flex-direction: column;
   font-size: 18px;
   color: white;
-  background-color: black;
+  font-family: 'Walter Turncoat', cursive;
+  /* background-color: #104b51; */
+  /* background-color: #946b46; */
 `
 
 const Main = styled.div`
@@ -88,7 +92,7 @@ const Main = styled.div`
 `
 
 const Video = styled.video`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;

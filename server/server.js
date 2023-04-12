@@ -10,6 +10,13 @@ const {
   getUserDreams,
   getOneDream,
   addComment, 
+  saveDream,
+  getSavedDreams,
+  addView,
+  deleteDream,
+  getUserData,
+  addRemoveLike,
+  deleteSavedDream,
 } = require('./handlers')
 
 express()
@@ -31,12 +38,20 @@ express()
   .get("/test", testFetch)
   .get("/all-dreams", getAllDreams)
   .get("/user-dreams/:userId", getUserDreams)
-  .get("/dream/:dreamId", getOneDream)
+  .get("/get-saved-dreams/:userId", getSavedDreams)
+  .get("/get-user-data/:userId", getUserData)
 
+  .post("/dream/:dreamId", getOneDream)
   .post("/add-user", addUser)
-
+  .post("/save-dream", saveDream)
   .post("/add-dream", addDream)
   .post("/add-comment", addComment)
+
+  .patch("/like-dream", addRemoveLike)
+  // .post("/add-view", addView)
+
+  .delete("/delete-dream/:dreamId", deleteDream)
+  .delete("/delete-saved-dream", deleteSavedDream)
 
 
   .listen(8000, () => console.log(`Listening on port 8000`));

@@ -26,7 +26,6 @@ const CreateDream = () => {
           })
           .then(res => res.json())
           .then(data => {
-            console.log(data)
             navigate(`/dream/${data.dreamId}`)
             })
           .catch(err => console.log(err))
@@ -34,7 +33,6 @@ const CreateDream = () => {
 
     return (
         <Wrapper>
-            <div>Create Dreams</div>
             <TabContainer>
                 <ButtonDiv>
                     <Button1 onClick={() => setTab(1)}>1. Dream</Button1>
@@ -55,11 +53,9 @@ const CreateDream = () => {
 
 const Tabs = styled.div`
     height: 800px;
-    border: 2px solid white;
-    padding: 50px;
+    padding: 30px 50px;
     display: flex;
     flex-direction: column;
-    background-color: #abbbd4;
 `
 
 const ButtonDiv = styled.div`
@@ -68,14 +64,26 @@ const ButtonDiv = styled.div`
 
 const Button1 = styled.button`
     flex: 1;
-    font-size: 18px;
-`
-const Button2 = styled.button``
-const Button3 = styled.button``
-const Button4 = styled.button``
+    font-size: 20px;
+    font-weight: bold;
+    padding: 7px 16px;
+    background-color: #ebebeb;
+    color: black;
+    border: 3px solid black;
+    border-radius: 10px;
+    cursor: pointer;
 
+    &:hover{
+        background-color: white;
+    }
+`
 const TabContainer = styled.div`
     width: 1300px;
+    margin-top: 20px;
+    padding: 15px;
+    border: 3px solid white;
+    border-radius: 15px;
+    background-color: #242424;
 `
 
 const Wrapper = styled.div`

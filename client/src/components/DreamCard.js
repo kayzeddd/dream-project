@@ -4,13 +4,21 @@ import styled from 'styled-components'
 import Dream from './create_components/Dream'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import { format } from 'date-fns'
+import { TbTrashX } from 'react-icons/tb'
+import { BsEyeFill } from 'react-icons/bs'
+import { AiFillLike } from 'react-icons/ai'
 
-const DreamCard = ({date, userId, extraData, dreamData, charData, dreamId}) => {
+const DreamCard = ({likeCount, deleteDream, date, userId, extraData, dreamData, charData, dreamId, viewCount}) => {
     const navigate = useNavigate();
     
     const wordCount = () =>{
-        return dreamData.dream.split(" ").length
+        return dreamData.dream.join().split(" ").length
     }
+
+    const formatDate = (d) => {
+        return format(new Date(d), "p '·' LLL d y");
+      }
 
     return(
         <WrapperLink
@@ -19,13 +27,18 @@ const DreamCard = ({date, userId, extraData, dreamData, charData, dreamId}) => {
             }}
         >
             <TopDiv>
-                <Title>Name: {dreamData.name}</Title>
-                <Author>Author:  
+                <Title>{dreamData.name}</Title>
+                {deleteDream 
+                ?<DeleteIcon onClick={(e) => {
+                    e.stopPropagation()
+                    deleteDream(dreamId)
+                }}/>
+                :<Author>Written by  
                     <AuthorLink onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/profile/${userId}`);
                     }}>{userId.split("@")[0]}</AuthorLink>
-                </Author>
+                </Author>}
             </TopDiv>
             <MidDiv>
                 <Summary>Summary: {extraData.summary}</Summary>
@@ -33,27 +46,66 @@ const DreamCard = ({date, userId, extraData, dreamData, charData, dreamId}) => {
                     <TypeP>Type of dream:</TypeP>
                     {extraData.checkedValues.map( type => {
                         return (
-                            <Type>{type},</Type>
+                            <Type>{type}</Type>
                         )
                     })}
                 </TypeDiv>
             </MidDiv>
             <BotDiv>
+                <ViewCount><ViewsIcon/> {viewCount}</ViewCount>
+                <LikeCount><LikeIcon/> {likeCount}</LikeCount>
                 <WordCount>word count: {wordCount()}</WordCount>
-                <Date>{date}</Date>
+                <Time>{formatDate(date)}</Time>
             </BotDiv>
         </WrapperLink>
        
     )
 }
 
+const LikeIcon = styled(AiFillLike)`
+    color: white;
+    font-size: 20px;
+`
+
+const ViewsIcon = styled(BsEyeFill)`
+    color: white;
+    font-size: 20px;
+`
+
+const DeleteIcon = styled(TbTrashX)`
+    font-size: 20px;
+`
+
+const LikeCount = styled.div`
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+`
+
+const DeleteBtn = styled.button`
+`
+
+const ViewCount = styled.div`
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+`
+
 const AuthorLink = styled.div`
+    text-decoration: underline;
+    margin-left: 8px;
+    font-weight: bold;
+    cursor: pointer;
 `
 
 const Summary = styled.div`
 `
 const Type = styled.div`
     margin-left: 5px;
+    /* text-decoration: underline; */
+    background-color: #ebebeb;
+    color: black;
+    padding: 0px 5px;
 `
 const TypeDiv = styled.div`
 display: flex;
@@ -67,7 +119,7 @@ const BotDiv = styled.div`
 const WordCount = styled.div`
 `
 
-const Date = styled.div`
+const Time = styled.div`
 `
 
 const MidDiv = styled.div`
@@ -81,6 +133,9 @@ const Author = styled.div`
 `
 
 const Title = styled.div`
+    font-size: 25px;
+    font-weight: bold;
+    text-decoration: underline;
 `
 
 const TopDiv = styled.div`
@@ -91,9 +146,12 @@ const TopDiv = styled.div`
 const WrapperLink = styled.div`
     display: flex;
     flex-direction: column;
-    row-gap: 10px;
+    row-gap: 14px;
     padding: 20px 30px;
-    border: 2px solid white;
+    border: 3px solid white;
+    background-color: #242424;
+    border-radius: 15px;
+    cursor: pointer;
 `
 
 

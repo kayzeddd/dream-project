@@ -10,13 +10,14 @@ const AllDreams = () => {
     const [filters, setFilters] = useState({
         date: "--",
         type: [],
+        views: "--",
+        likes: "--",
       });
 
     useEffect(()=>{
         fetch(`http://localhost:8000/all-dreams`)
         .then(res => res.json())
         .then(data => {
-            console.log(data.allDreams)
             setSaveAllDreams(data.allDreams)
             setAllDreams(data.allDreams)
         })
@@ -51,7 +52,7 @@ const AllDreams = () => {
             if( filters.type.length > 0 ){
                 dreamsArr = dreamsArr.filter( dream => {
                     const typeArr = dream.dreamData.finalData.checkedValues;
-                    return filters.type.some( type => typeArr.includes(type))
+                    return filters.type.every( type => typeArr.includes(type))
                 })
             }
 
@@ -59,7 +60,6 @@ const AllDreams = () => {
                 dreamsArr = dreamsArr.sort( (dreamOne, dreamTwo) => {
                     const date1 = new Date(dreamOne.date);
                     const date2 = new Date(dreamTwo.date);
-                    console.log(date1, date2)
                     if(filters.date === "recent"){
                         return date2 - date1
                     }
@@ -69,44 +69,99 @@ const AllDreams = () => {
                 })
             }
 
+            if( filters.views !== "--"){
+                dreamsArr = dreamsArr.sort( (dreamOne, dreamTwo) => {
+                    const dreamViews1 = dreamOne.viewerArr.length;
+                    const dreamViews2 = dreamTwo.viewerArr.length;
+                    if(filters.views === "most-viewed"){
+                        return dreamViews2 - dreamViews1
+                    }
+                    else if(filters.views === "least-viewed"){
+                        return dreamViews1 - dreamViews2
+                    }
+                })
+            }
+
+            if( filters.likes !== "--"){
+                dreamsArr = dreamsArr.sort( (dreamOne, dreamTwo) => {
+                    const dreamLikes1 = dreamOne.likesArr.length;
+                    const dreamLikes2 = dreamTwo.likesArr.length;
+                    if(filters.likes === "most-liked"){
+                        return dreamLikes2 - dreamLikes1
+                    }
+                    else if(filters.likes === "least-liked"){
+                        return dreamLikes1 - dreamLikes2
+                    }
+                })
+            }
+
             setAllDreams(dreamsArr)
         }  
-    }, [filters.date, filters.type])
+    }, [filters.date, filters.type, filters.views, filters.likes])
 
     return(
         <Wrapper>
             <InnerWrapper>
-                <div>all dreams</div>
                 <FilterDiv>
-                    <DateLabel htmlFor="date">
-                        <DateSelect 
-                        name="date" 
-                        id="date"
-                        onChange={(ev) => handleFilter(ev.target.id, ev.target.value)}
-                        >
-                            <DateOption value="--">--</DateOption>
-                            <DateOption value="recent">Most Recent</DateOption>
-                            <DateOption value="oldest">Oldest</DateOption>
-                        </DateSelect>
-                    </DateLabel>
-                    <TypeWrapper>
-                        {dreamTypes.map( type => {
-                            return (
-                                <TypeDiv>
-                                    <TypeInput type="checkbox" id={type}value={type}name={type} onClick={handleCheck}/>
-                                    <TypeLabel htmlFor={type}>{type}</TypeLabel>
-                                </TypeDiv>
-                            )
-                        })}
-                    </TypeWrapper>
+                    <TopFilters>
+                        <DateLabel htmlFor="date">Filter by Time:
+                            <DateSelect
+                            name="date"
+                            id="date"
+                            onChange={(ev) => handleFilter(ev.target.id, ev.target.value)}
+                            >
+                                <DateOption value="--">--</DateOption>
+                                <DateOption value="recent">Most Recent</DateOption>
+                                <DateOption value="oldest">Oldest</DateOption>
+                            </DateSelect>
+                        </DateLabel>
+                        <ViewsLabel htmlFor="views">Filter by Views:
+                            <ViewsSelect
+                            name="views"
+                            id="views"
+                            onChange={(ev) => handleFilter(ev.target.id, ev.target.value)}
+                            >
+                                <ViewsOption value="--">--</ViewsOption>
+                                <ViewsOption value="most-viewed">Most Viewed</ViewsOption>
+                                <ViewsOption value="least-viewed">Least Viewed</ViewsOption>
+                            </ViewsSelect>
+                        </ViewsLabel>
+                        <LikesLabel htmlFor="likes">Fitler by Likes:
+                            <LikesSelect
+                            name="likes"
+                            id="likes"
+                            onChange={(ev) => handleFilter(ev.target.id, ev.target.value)}
+                            >
+                                <LikesOption value="--">--</LikesOption>
+                                <LikesOption value="most-liked">Most Liked</LikesOption>
+                                <LikesOption value="least-liked">Least Liked</LikesOption>
+                            </LikesSelect>
+                        </LikesLabel>
+                    </TopFilters>
+                    <TypeSelectDiv>
+                        <TypeText>Type of Dream:</TypeText>
+                        <TypeWrapper>
+                            {dreamTypes.map( type => {
+                                return (
+                                    <TypeDiv>
+                                        <TypeInput type="checkbox" id={type}value={type}name={type} onClick={handleCheck}/>
+                                        <TypeLabel htmlFor={type}>{type}</TypeLabel>
+                                    </TypeDiv>
+                                )
+                            })}
+                        </TypeWrapper>
+                    </TypeSelectDiv>
+                    <NumDreams>Number of Dreams: <NumSpan>{allDreams ? allDreams.length : 0}</NumSpan></NumDreams>
                 </FilterDiv>
                 <DreamsWrapper>
-                    {allDreams &&
+                    {allDreams && 
                         allDreams.map( dream => {
-                            if(dream.dreamData.finalData.radioValue === "private"){
+                            if(dream.dreamData.finalData.privacySetting === "private"){
                                 return <></>
                             }
                             return <DreamCard
+                                    likeCount={dream.likesArr.length}
+                                    viewCount={dream.viewerArr.length}
                                     dreamId={dream._id}
                                     date={dream.date}
                                     userId={dream.userId}
@@ -123,6 +178,45 @@ const AllDreams = () => {
     )
 }
 
+
+const NumSpan = styled.span`
+    background-color: #242424;
+    padding: 2px 5px;
+    font-weight: bold;
+`
+
+const NumDreams = styled.div`
+    margin-top: 10px;
+`
+
+const TopFilters = styled.div`
+    display: flex;
+    column-gap: 20px;
+    justify-content: center;
+`
+
+const TypeText = styled.div`
+margin-bottom: 10px;
+`
+
+const LikesOption = styled.option`
+`
+
+const LikesSelect = styled.select`
+`
+
+const LikesLabel = styled.label`
+`
+
+const ViewsOption = styled.option`
+`
+
+const ViewsSelect = styled.select`
+`
+
+const ViewsLabel = styled.label`
+`
+
 const TypeLabel = styled.label`
 `
 
@@ -133,6 +227,13 @@ const TypeDiv = styled.div`
 `
 
 const TypeWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    row-gap: 10px;
+`
+
+const TypeSelectDiv = styled.div`
 `
 
 const DateOption = styled.option`
@@ -145,6 +246,13 @@ const DateLabel = styled.label`
 `
 
 const FilterDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    background-color:#404040;
+    border: 2px solid white;
+    margin: 10px 0px;
+    padding: 20px;
 `
 
 const DreamsWrapper = styled.div`

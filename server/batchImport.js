@@ -9,7 +9,6 @@ const options = {
 const { createUsersAndDreams } = require("./data")
 
 const data = createUsersAndDreams();
-console.log(data)
 
 const batchImport = async () => {
     const client = new MongoClient(MONGO_URI, options);

@@ -14,6 +14,11 @@ const Dream = ({dreamData, setDreamData}) => {
         
     }
 
+    const handleDream = (id, value) => {
+        setStoryData({...storyData, [id]: value.split("\n")})
+        
+    }
+
     useEffect(()=>{
         setDreamData({...dreamData, storyData})
         return () => {
@@ -37,7 +42,7 @@ const Dream = ({dreamData, setDreamData}) => {
                 <TextInput 
                 type="text" 
                 id="dream"
-                onChange={(e) => handleChange(e.target.id,e.target.value)}
+                onChange={(e) => handleDream(e.target.id,e.target.value)}
                 value={storyData["dream"] ? storyData["dream"] : "" }
                 />
             </TextDiv>
@@ -56,9 +61,11 @@ const TextLabel = styled.label`
 `
 
 const TextInput = styled.textarea`
-overflow-y: scroll;
+    overflow-y: scroll;
     flex: 1;
     resize: none;
+    font-size: 18px;
+    font-family: 'Walter Turncoat', cursive;
 `
 
 const NameDiv = styled.div`
@@ -71,6 +78,8 @@ const NameLabel = styled.label`
 `
 
 const NameInput = styled.input`
+    font-size: 18px;
+    font-family: 'Walter Turncoat', cursive;
 `
 
 const Wrapper = styled.div`

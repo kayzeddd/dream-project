@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 const Profile = () => {
     const [saveAllDreams, setSaveAllDreams] = useState(null);
     const [allDreams, setAllDreams] = useState(null);
+    const [userData, setUserData] =  useState(null)
 
     const {userId} = useParams()
 
@@ -15,36 +16,62 @@ const Profile = () => {
             fetch(`http://localhost:8000/user-dreams/${userId}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 setSaveAllDreams(data)
                 setAllDreams(data)
             })
-            .catch(err => console.log(err))}
+            .catch(err => console.log(err))
+            
+            fetch(`http://localhost:8000/get-user-data/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                setUserData(data.userData)
+            })
+            .catch(err => console.log(err))
+        }
     }, [userId])
 
     return(
         <Wrapper>
             <InnerWrapper>
-                <div>Profile</div>
-                <DreamsWrapper>
-                    {allDreams &&
-                        allDreams.map( dream => {
-                            return <DreamCard
-                                    dreamId={dream._id}
-                                    date={dream.date}
-                                    userId={userId}
-                                    extraData={dream.dreamData.finalData}
-                                    dreamData={dream.dreamData.storyData}
-                                    charData={dream.dreamData.charData}
-                                    />
-                        })
-                    }
-                </DreamsWrapper>
+                {allDreams && userData &&
+                <>  
+                    <UserDiv>
+                        <Name>{userData.userData.nickname}</Name>
+                    </UserDiv>
+                    <DreamsWrapper>
+                            {allDreams.map( dream => {
+                                return <DreamCard
+                                        likeCount={dream.likesArr.length}
+                                        viewCount={dream.viewerArr.length}
+                                        dreamId={dream._id}
+                                        date={dream.date}
+                                        userId={dream.userData.email}
+                                        extraData={dream.dreamData.finalData}
+                                        dreamData={dream.dreamData.storyData}
+                                        charData={dream.dreamData.charData}
+                                        />
+                            })}
+                    </DreamsWrapper>        
+                </>
+                }
             </InnerWrapper>
         </Wrapper>
        
     )
 }
+
+const Name = styled.div`
+    font-weight: bold;
+    font-size: 35px;
+    text-decoration: underline;
+    color: black;
+`
+
+const UserDiv = styled.div`
+    display: flex;
+    justify-content: center;
+    margin: 15px;
+`
 
 
 const DreamsWrapper = styled.div`

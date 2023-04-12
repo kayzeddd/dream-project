@@ -17,17 +17,21 @@ const Description = styled.div`
 `
 
 const Img = styled.img`
-    height: 200px;
+    min-height: 140px;
     width: auto;
+    flex: 0;
 `
 
 const NameDiv = styled.div`
+    font-weight: bold;
 `
 
 const Wrapper = styled.div`
-    width: 210px;
+    min-width: 230px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    row-gap: 5px;
     padding: 20px;
     border: 2px solid white;
 `
