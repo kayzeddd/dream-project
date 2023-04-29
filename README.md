@@ -1,4 +1,4 @@
-# Dream Blog Project
+# Other World - Dream Blog Project
 
 Website where users can create and share their dreams with other users.
 ## Tech Stack
